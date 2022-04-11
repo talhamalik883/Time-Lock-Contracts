@@ -57,11 +57,16 @@ contract TimeLock is EIP712MetaTransaction("MetaTrx", "1") {
     // it will let users to claim native or erc20 tokens
     function claim() external{
         address sender = msgSender();
+        // fetch total count of claimables again user
         uint256 claimablesLength = claimableInfo[sender].length;
+        require(claimablesLength !=0, "TimeLock: You dont have anything to claim");
 
         for (uint256 index = 0; index < claimablesLength; index++) {
             ClaimableInfo storage claimInstance = claimableInfo[sender][index];
+
+            // checking whether the claim is eligible or not
             if (  block.timestamp > claimInstance.expiry ){
+                // handling eligible claims
                 handleClaims(sender, claimInstance.amount, claimInstance.tokenAddress);
                 delete claimableInfo[sender][index];
             }
@@ -102,18 +107,19 @@ contract TimeLock is EIP712MetaTransaction("MetaTrx", "1") {
         }
     }
 
-    // enable/disable currencies that can be deposited in contract    
-    function toggleCurrency(address _tokenAddress, bool status)
+    // enable/disable currencies that can be deposited in contract
+    // function is not restricted to owner only to let anyone enable any token 
+    function enableToken(address _tokenAddress)
         external
         returns (bool)
     {
         require(_tokenAddress != address(0), "TimeLock: Invalid Token Address!");
         require(
-            !this.isTokenApproved(_tokenAddress) && status == true,
+            !this.isTokenApproved(_tokenAddress),
             "TimeLock: Token Already Configured!"
         );
 
-        approvedCurrency[_tokenAddress] = status;
+        approvedCurrency[_tokenAddress] = true;
         return true;
     }
 

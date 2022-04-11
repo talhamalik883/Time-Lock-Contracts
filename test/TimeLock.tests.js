@@ -47,9 +47,8 @@ describe("TimeLock", function () {
 
     // adding mock tokens as enabled currency
 
-    await this.timeLockInstance.toggleCurrency(
-      this.mockErc20Instance.address,
-      true
+    await this.timeLockInstance.enableToken(
+      this.mockErc20Instance.address
     );
   });
 
@@ -206,7 +205,7 @@ describe("TimeLock", function () {
 
     // Claiming Native Tokens for carol
     await this.timeLockInstance.connect(this.carol).claim();
-    
+
     // Fetching ERC20 Tokens balance for timeLock contract after claim
     const contractBalanceAfterClaim = await this.mockErc20Instance.balanceOf(this.timeLockInstance.address)
     

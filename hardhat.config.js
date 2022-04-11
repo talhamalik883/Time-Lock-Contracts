@@ -33,6 +33,7 @@ module.exports = {
       url: process.env.KOVAN_URL || "",
       accounts:
         process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
+        gasPrice: 35000000000
     },
     ethereum_main: {
       url: process.env.ETHEREUM_MAINET_URL || "",
