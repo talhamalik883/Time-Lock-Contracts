@@ -19,7 +19,7 @@ async function main() {
 
   await timeLock.deployed();
   
-  console.log("TimeLock deployed to:", greeter.address);
+  console.log("TimeLock deployed to:", timeLock.address);
 
   // verify contract over blockchain scan
   await hre.run("verify:verify", {
